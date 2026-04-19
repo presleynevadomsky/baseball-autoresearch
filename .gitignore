@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .venv/
 stat390/
+.DS_Store
+Icon
