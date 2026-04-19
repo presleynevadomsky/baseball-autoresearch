@@ -79,7 +79,7 @@ python prepare.py
 ### 4. Run a single experiment manually
 
 ```bash
-python run.py "baseline: sprint speed only"
+python3 run.py "baseline: routing distance only"
 ```
 
 ## Running the agent
