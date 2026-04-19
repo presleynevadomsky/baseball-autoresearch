@@ -1,6 +1,6 @@
 # baseball-autoresearch
 
-The idea: give an AI agent a library of Statcast defensive tracking variables and let it discover new baseball metrics autonomously. It proposes a candidate metric, computes it against real MLB data, checks if it predicts Outs Above Average (OAA) better than the current best, keeps or discards, and repeats. You wake up in the morning to a log of experiments and (hopefully) a better way to measure fielding.
+The idea: give an AI agent a library of Statcast defensive tracking variables and let it discover new baseball metrics autonomously. It proposes a candidate regression model, trains it against real MLB data, checks if it predicts Outs Above Average (OAA) better than the current best, keeps or discards, and repeats. You wake up in the morning to a log of experiments and (hopefully) a better way to measure fielding.
 
 The core idea is that you're not touching any of the Python files like a researcher normally would. Instead, you program the `program.md` file that provides context to the AI agents and defines what a "good" defensive metric looks like. The agent does the rest.
 
@@ -8,18 +8,18 @@ The core idea is that you're not touching any of the Python files like a researc
 
 The repo has three files that matter:
 
-- **`prepare.py`** — one-time data pull from MLB Statcast via pybaseball, baseline correlation analysis, and runtime utilities. Not modified by the agent.
-- **`model.py`** — the single file the agent edits. Contains the candidate metric formula combining Statcast variables (sprint speed, jump, route efficiency, arm strength, etc.). **This file is edited and iterated on by the agent**.
+- **`prepare.py`** — one-time data pull from MLB Statcast via pybaseball, baseline RMSE computation, and runtime utilities. Not modified by the agent.
+- **`model.py`** — the single file the agent edits. Defines `build_model()` which returns an sklearn estimator combining Statcast variables (sprint speed, jump, route efficiency, burst distance, etc.). **This file is edited and iterated on by the agent**.
 - **`program.md`** — baseline instructions for the agent. Describes the research goal, available variables, and evaluation criteria. **This file is edited and iterated on by the human**.
 
-The metric is **correlation with OAA** (Outs Above Average) — higher is better. The agent runs for a fixed number of iterations (default 20), keeping the best metric found along the way.
+The metric is **val_rmse** (validation RMSE predicting OAA) — lower is better. The agent runs for a fixed number of iterations (default 20), keeping the best model found along the way.
 
 ## Project structure
 
 ```
 prepare.py      — data pull + baseline utilities (do not modify)
-model.py        — candidate metric formula (agent modifies this)
-run.py          — executes model.py, scores correlation, logs to results.tsv
+model.py        — defines build_model() → sklearn estimator (agent modifies this)
+run.py          — executes model.py, scores val_rmse, logs to results.tsv
 program.md      — agent instructions
 results.tsv     — log of all experiments and scores
 memory.json     — tracks past hypotheses to avoid redundancy
@@ -88,15 +88,15 @@ Point Claude or any LLM agent at this repo and prompt:
 
 ```
 Read program.md for your instructions, then read model.py.
-Run `python run.py "baseline"` to establish the baseline correlation.
+Run `python run.py "baseline"` to establish the baseline RMSE.
 Then enter the AutoResearch loop:
 
-1. Propose one new candidate metric combining Statcast variables.
-2. Edit model.py with your change.
+1. Propose one new candidate model combining Statcast variables.
+2. Edit model.py with your change to build_model().
 3. Run: python run.py "<short description of what you changed>"
-4. Compare the new correlation to the current best.
-   - If improved: KEEP the change, note the new best.
-   - If worse: REVERT model.py to the previous version.
+4. Compare the new val_rmse to the current best.
+   - If lower: KEEP the change, note the new best.
+   - If higher: REVERT model.py to the previous version.
 5. Repeat from step 1 for at least 20 iterations.
 
 After all iterations, run `python prepare.py` to generate performance.png.
