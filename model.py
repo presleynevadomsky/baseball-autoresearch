@@ -1,17 +1,17 @@
-"""
-EDITABLE -- The agent modifies this file.
-Define the model pipeline for California Housing regression.
-The function build_model() must return an sklearn-compatible estimator.
-"""
-from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
-
+from sklearn.preprocessing import StandardScaler
 
 def build_model():
-    """Return an sklearn Pipeline. This is what the agent improves."""
+    """
+    Baseline: linear regression using routing distance only.
+    The agent will modify this function each iteration.
+    """
     return Pipeline([
-        ("model", HistGradientBoostingRegressor(
-            max_iter=300, max_depth=8, learning_rate=0.08,
-            min_samples_leaf=20, random_state=42,
-        )),
+        ("scaler", StandardScaler()),
+        ("model", LinearRegression())
     ])
+
+FEATURES = [
+    "rel_league_routing_distance"
+]

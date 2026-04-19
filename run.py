@@ -1,65 +1,51 @@
-"""
-Run one experiment: build model, train, evaluate, log result.
-
-Usage:
-    python run.py "description"              # logs as status=keep
-    python run.py "description" --baseline   # logs as status=baseline
-    python run.py "description" --discard    # logs as status=discard
-"""
 import sys
 import time
-import subprocess
-from prepare import load_data, evaluate, log_result
+import pandas as pd
+import numpy as np
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+from datetime import datetime
+from model import build_model, FEATURES
 
+# ── Load data ──────────────────────────────────────────────────────────────
+df = pd.read_csv("data/train_val.csv")
+TARGET = "outs_above_average"
 
-def get_git_hash():
-    try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "--short", "HEAD"],
-            stderr=subprocess.DEVNULL,
-        ).decode().strip()
-    except Exception:
-        return "no-git"
+# Drop missing
+df = df.dropna(subset=FEATURES + [TARGET])
 
+# ── Fixed train/val split (same seed every run) ────────────────────────────
+X = df[FEATURES]
+y = df[TARGET]
+X_train, X_val, y_train, y_val = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-def main():
-    args = sys.argv[1:]
-    status = "keep"
-    description_parts = []
-    for a in args:
-        if a == "--baseline":
-            status = "baseline"
-        elif a == "--discard":
-            status = "discard"
-        else:
-            description_parts.append(a)
-    description = " ".join(description_parts) if description_parts else "experiment"
+# ── Build and train model ──────────────────────────────────────────────────
+start = time.time()
+model = build_model()
+model.fit(X_train, y_train)
+preds = model.predict(X_val)
+val_rmse = np.sqrt(mean_squared_error(y_val, preds))
+runtime = round(time.time() - start, 2)
 
-    # 1. Load data (frozen)
-    X_train, y_train, X_val, y_val, feature_names = load_data()
-    print(f"Data: {X_train.shape[0]} train, {X_val.shape[0]} val, {len(feature_names)} features")
+# ── Description from command line ─────────────────────────────────────────
+desc = sys.argv[1] if len(sys.argv) > 1 else "no description"
 
-    # 2. Build model (editable)
-    from model import build_model
-    model = build_model()
-    print(f"Model: {model}")
+# ── Log result ────────────────────────────────────────────────────────────
+result = {
+    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "description": desc,
+    "features": str(FEATURES),
+    "val_rmse": round(val_rmse, 6),
+    "runtime_sec": runtime
+}
 
-    # 3. Train
-    t0 = time.time()
-    model.fit(X_train, y_train)
-    train_time = time.time() - t0
-    print(f"Training time: {train_time:.2f}s")
+log = pd.DataFrame([result])
+header = not pd.io.common.file_exists("results.tsv")
+log.to_csv("results.tsv", sep="\t", mode="a", header=header, index=False)
 
-    # 4. Evaluate (frozen metric)
-    val_rmse, val_r2 = evaluate(model, X_val, y_val)
-    print(f"val_rmse: {val_rmse:.6f}")
-    print(f"val_r2:   {val_r2:.6f}")
-
-    # 5. Log
-    commit = get_git_hash()
-    log_result(commit, val_rmse, val_r2, status, description)
-    print(f"Result logged to results.tsv (status={status})")
-
-
-if __name__ == "__main__":
-    main()
+print(f"Description: {desc}")
+print(f"Features: {FEATURES}")
+print(f"val_rmse: {val_rmse:.6f}")
+print(f"Runtime: {runtime}s")
