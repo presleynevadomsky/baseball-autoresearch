@@ -1,5 +1,4 @@
 __pycache__/
 *.pyc
 .venv/
-results.tsv
-performance.png
+stat390/
