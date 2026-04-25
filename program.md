@@ -50,9 +50,10 @@ You can also combine feature engineering with any model using sklearn Pipelines:
 
 ## How to Run an Experiment
 
-Always use this exact command:
+Always use this exact command — do not use `python3` or any other Python path:
+
 ```bash
-/Users/presleynevadomsky/Desktop/baseball-autoresearch/stat390/bin/python3 run.py "<short description of what you changed>"
+/Users/presleynevadomsky/Desktop/baseball-autoresearch/stat390/bin/python3 run.py ""
 ```
 
 This will:
