@@ -15,3 +15,12 @@ def build_model():
 FEATURES = [
     "rel_league_routing_distance"
 ]
+
+# All available features the agent can use:
+# "rel_league_routing_distance"
+# "rel_league_burst_distance"
+# "rel_league_reaction_distance"
+# "rel_league_bootup_distance"
+# "f_bootup_distance"
+# "outs_per_play"
+# "sprint_speed"

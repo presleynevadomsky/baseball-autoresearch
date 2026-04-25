@@ -11,12 +11,13 @@ df = pd.read_csv("data/train_val.csv")
 
 # ── Define features and target ─────────────────────────────────────────────
 FEATURES = [
+    "rel_league_routing_distance",
     "rel_league_burst_distance",
     "rel_league_reaction_distance",
-    "rel_league_routing_distance",
     "rel_league_bootup_distance",
     "f_bootup_distance",
-    "outs_per_play"
+    "outs_per_play",
+    "sprint_speed"
 ]
 TARGET = "outs_above_average"
 
@@ -31,7 +32,7 @@ X_train, X_val, y_train, y_val = train_test_split(
 )
 
 print(f"Train: {len(X_train)} rows | Val: {len(X_val)} rows")
-print(f"Test set: locked in data/test.csv (not touched until final evaluation)")
+print(f"Test set: locked in data/test.csv (2024 season, not touched until final evaluation)")
 
 # ── Plotting ───────────────────────────────────────────────────────────────
 def plot_results():
