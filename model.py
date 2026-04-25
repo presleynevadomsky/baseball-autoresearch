@@ -1,19 +1,21 @@
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 def build_model():
-    """
-    Baseline: linear regression using routing distance only.
-    The agent will modify this function each iteration.
-    """
     return Pipeline([
         ("scaler", StandardScaler()),
-        ("model", LinearRegression())
+        ("model", Ridge(alpha=1.0))
     ])
 
 FEATURES = [
-    "rel_league_routing_distance"
+    "rel_league_routing_distance",
+    "rel_league_burst_distance",
+    "rel_league_reaction_distance",
+    "rel_league_bootup_distance",
+    "f_bootup_distance",
+    "outs_per_play",
+    "sprint_speed"
 ]
 
 # All available features the agent can use:

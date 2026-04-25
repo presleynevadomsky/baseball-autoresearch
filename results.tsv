@@ -1,1 +1,5 @@
 2026-04-24 22:20:09	baseline: routing distance only	['rel_league_routing_distance']	4.524665	0.0
+2026-04-25 08:46:10	added burst distance	['rel_league_routing_distance', 'rel_league_burst_distance']	3.147574	0.01
+2026-04-25 08:47:51	all features linear regression	['rel_league_routing_distance', 'rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_bootup_distance', 'f_bootup_distance', 'outs_per_play', 'sprint_speed']	2.404943	0.0
+2026-04-25 08:49:13	random forest all features	['rel_league_routing_distance', 'rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_bootup_distance', 'f_bootup_distance', 'outs_per_play', 'sprint_speed']	2.433751	0.13
+2026-04-25 08:51:02	ridge regression all features alpha=1.0	['rel_league_routing_distance', 'rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_bootup_distance', 'f_bootup_distance', 'outs_per_play', 'sprint_speed']	2.409692	0.01
