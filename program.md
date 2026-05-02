@@ -89,3 +89,4 @@ All results are automatically logged to `results.tsv` with timestamp, descriptio
 5. Keep or revert
 6. Repeat for at least 20 iterations
 7. After all iterations run: `python3 prepare.py` to generate performance.png
+8. After each experiment, append a new row to `experiments.md` with: experiment number, description of what changed, val_rmse, keep or discard decision, and error type (Signal Failure, Code Instability, Agent Misbehavior, or Evaluation Leakage)
