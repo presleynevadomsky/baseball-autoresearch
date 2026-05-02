@@ -20,6 +20,7 @@ Specifically, you may change:
 - `run.py` — frozen, do not modify
 - `data/` — do not modify any data files
 - `results.tsv` — do not modify manually, it is written by run.py
+- `program.md` — frozen, this is the human's instruction file
 
 ## Available Features
 
@@ -50,10 +51,14 @@ You can also combine feature engineering with any model using sklearn Pipelines:
 
 ## How to Run an Experiment
 
-Always use this exact command — do not use `python3` or any other Python path:
-
+Make sure your virtual environment is activated:
 ```bash
-/Users/presleynevadomsky/Desktop/baseball-autoresearch/stat390/bin/python3 run.py ""
+source stat390/bin/activate
+```
+
+Then run:
+```bash
+python3 run.py "<short description of what you changed>"
 ```
 
 This will:
@@ -62,16 +67,14 @@ This will:
 3. Score on the remaining 20%
 4. Print and log val_rmse to results.tsv
 
+## Current Best
+
+Check results.tsv to find the current best val_rmse before starting. The agent must beat this number to keep a change.
+
 ## Keep / Discard Rule
 
 - If new val_rmse < current best val_rmse → KEEP the change
 - If new val_rmse >= current best val_rmse → REVERT model.py to previous version
-
-## Current Baseline
-
-- Features: `rel_league_routing_distance` only
-- val_rmse: 4.524665
-- Your job: beat this number
 
 ## Experiment Log
 
@@ -79,9 +82,9 @@ All results are automatically logged to `results.tsv` with timestamp, descriptio
 
 ## Loop Instructions
 
-1. Read results.tsv to review what has been tried
+1. Read results.tsv to find the current best val_rmse
 2. Propose one change to model.py
-3. Run: `python3 run.py "<description>"`
+3. Activate venv and run: `python3 run.py "<description>"`
 4. Compare new val_rmse to current best
 5. Keep or revert
 6. Repeat for at least 20 iterations
