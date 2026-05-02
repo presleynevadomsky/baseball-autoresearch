@@ -39,7 +39,9 @@ def plot_results():
     if not os.path.exists("results.tsv"):
         print("No results.tsv found yet.")
         return
-    results = pd.read_csv("results.tsv", sep="\t")
+    results = pd.read_csv("results.tsv", sep="\t", header=None, names=["timestamp", "description", "features", "val_rmse", "runtime"])
+    results["val_rmse"] = pd.to_numeric(results["val_rmse"], errors="coerce")
+    results = results.dropna(subset=["val_rmse"])
     if len(results) == 0:
         print("No experiments logged yet.")
         return
