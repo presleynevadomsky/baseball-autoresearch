@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 def build_model():
     return Pipeline([
         ("scaler", StandardScaler()),
-        ("model", GradientBoostingRegressor(n_estimators=500, max_depth=3, learning_rate=0.03, subsample=0.8, random_state=42))
+        ("model", GradientBoostingRegressor(n_estimators=500, max_depth=3, learning_rate=0.01, subsample=0.8, random_state=42))
     ])
 
 FEATURES = [

@@ -32,6 +32,7 @@
 | 17 | 2026-05-02 | Exp6: max_depth=2 only | depth 3 → 2 | all 7 | 2.323412 | -2.201 | ✅ keep | — |
 | 18 | 2026-05-02 | Exp7: max_depth=4 only | depth 3 → 4 | all 7 | 2.430151 | -2.095 | ❌ discard | Signal Failure |
 | 19 | 2026-05-02 | Combo: lr=0.01 + depth=2 + no sprint_speed | combined top 3 improvements | 6 features | 2.327434 | -2.197 | ❌ discard | Signal Failure |
+| 20 | 2026-05-02 | Exp8: learning_rate=0.005 only | lr 0.01 → 0.005 | all 7 | 2.411349 | -2.113 | ❌ discard | Signal Failure |
 
 ---
 
@@ -61,3 +62,4 @@ No instances observed. The evaluation logic in `run.py` remained frozen througho
 - **Best hyperparameter change:** learning_rate=0.01 — single biggest improvement in controlled experiments
 - **Combinations don't always stack:** lr=0.01 + depth=2 + no sprint_speed performed worse than lr=0.01 alone, suggesting these changes partially conflict
 - **Total improvement:** 4.524665 → 2.297824 (49% reduction in RMSE over 19 experiments)
+- **Optimal learning rate:** lr=0.01 is the sweet spot — lr=0.005 underfits (RMSE 2.411) and lr=0.05 overfits (RMSE 2.440). Lower is not always better.
