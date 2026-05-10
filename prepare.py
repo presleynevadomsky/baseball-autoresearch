@@ -11,15 +11,15 @@ df = pd.read_csv("data/train_val.csv")
 
 # ── Define features and target ─────────────────────────────────────────────
 FEATURES = [
-    "rel_league_routing_distance",
     "rel_league_burst_distance",
     "rel_league_reaction_distance",
+    "rel_league_routing_distance",
     "rel_league_bootup_distance",
     "f_bootup_distance",
-    "outs_per_play",
-    "sprint_speed"
+    "sprint_speed",
+    "age"
 ]
-TARGET = "outs_above_average"
+TARGET = "next_year_oaa"
 
 # Drop rows with missing values
 df = df.dropna(subset=FEATURES + [TARGET])

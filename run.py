@@ -9,7 +9,7 @@ from model import build_model, FEATURES
 
 # ── Load data ──────────────────────────────────────────────────────────────
 df = pd.read_csv("data/train_val.csv")
-TARGET = "outs_above_average"
+TARGET = "next_year_oaa"
 
 # Drop missing
 df = df.dropna(subset=FEATURES + [TARGET])

@@ -1,8 +1,10 @@
-# AutoResearch Program: Defensive Metric Discovery in MLB
+# AutoResearch Program: Predicting Next-Year Defensive Value in MLB
 
 ## Objective
 
-You are an autonomous research agent. Your goal is to discover a combination of Statcast defensive tracking variables that predicts Outs Above Average (OAA) better than the current best model.
+You are an autonomous research agent. Your goal is to discover the best model for predicting an outfielder's Outs Above Average (OAA) **next season** using only their physical tracking data from **this season**.
+
+This is a forward-looking prediction problem — the model should help teams identify which players will be elite defenders next year before the season starts, based purely on physical skills.
 
 You will do this by modifying `model.py` one change at a time, evaluating the result, and keeping or discarding the change based on whether it improves val_rmse.
 
@@ -11,7 +13,7 @@ You will do this by modifying `model.py` one change at a time, evaluating the re
 You may ONLY modify `model.py`. Nothing else.
 
 Specifically, you may change:
-- The `FEATURES` list — which Statcast variables to include
+- The `FEATURES` list — which physical tracking variables to include
 - The `build_model()` function — which sklearn model and parameters to use
 
 ## What You Must Never Touch
@@ -21,28 +23,37 @@ Specifically, you may change:
 - `data/` — do not modify any data files
 - `results.tsv` — do not modify manually, it is written by run.py
 - `program.md` — frozen, this is the human's instruction file
+- `experiments.md` — do not modify manually, update after each run per step 8
+
+## Dataset
+
+- **Input (X):** Year N physical tracking stats for each outfielder
+- **Target (y):** Year N+1 OAA for the same outfielder
+- **Train/val:** 2016-2022 seasons (430 matched pairs)
+- **Test:** 2023 seasons → 2024 OAA (69 rows, locked — do not touch)
 
 ## Available Features
 
 You may use any combination of these variables in FEATURES:
 
-- `rel_league_routing_distance` — route efficiency relative to league average
 - `rel_league_burst_distance` — burst speed relative to league average
 - `rel_league_reaction_distance` — reaction time relative to league average
+- `rel_league_routing_distance` — route efficiency relative to league average
 - `rel_league_bootup_distance` — first step relative to league average
 - `f_bootup_distance` — absolute first step distance
-- `outs_per_play` — how often the player converts opportunities into outs
 - `sprint_speed` — player sprint speed in ft/sec
+- `age` — player age (important for predicting year-over-year change)
 
 ## Available Models
 
 You may use any sklearn-compatible estimator inside build_model(). Some options to explore:
 
 - `LinearRegression()` — baseline, simple linear model
-- `Ridge(alpha=...)` — linear model with regularization, try alpha values like 0.1, 1.0, 10.0
+- `Ridge(alpha=...)` — linear model with regularization
 - `Lasso(alpha=...)` — linear model that can zero out weak features
 - `RandomForestRegressor(n_estimators=...)` — ensemble of decision trees
 - `GradientBoostingRegressor(n_estimators=..., max_depth=...)` — powerful ensemble
+- `XGBRegressor(...)` — if xgboost is installed
 - `SVR(kernel=..., C=...)` — support vector regression
 
 You can also combine feature engineering with any model using sklearn Pipelines:
@@ -61,15 +72,9 @@ Then run:
 python3 run.py "<short description of what you changed>"
 ```
 
-This will:
-1. Load your updated model.py
-2. Train on 80% of train_val.csv
-3. Score on the remaining 20%
-4. Print and log val_rmse to results.tsv
-
 ## Current Best
 
-Check results.tsv to find the current best val_rmse before starting. The agent must beat this number to keep a change.
+Check results.tsv to find the current best val_rmse before starting. Beat this number to keep a change.
 
 ## Keep / Discard Rule
 

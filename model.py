@@ -1,19 +1,23 @@
-from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 def build_model():
+    """
+    Baseline: linear regression using all physical features.
+    The agent will modify this function each iteration.
+    """
     return Pipeline([
         ("scaler", StandardScaler()),
-        ("model", GradientBoostingRegressor(n_estimators=500, max_depth=3, learning_rate=0.01, subsample=0.8, random_state=42))
+        ("model", LinearRegression())
     ])
 
 FEATURES = [
-    "rel_league_routing_distance",
     "rel_league_burst_distance",
     "rel_league_reaction_distance",
+    "rel_league_routing_distance",
     "rel_league_bootup_distance",
     "f_bootup_distance",
-    "outs_per_play",
-    "sprint_speed"
+    "sprint_speed",
+    "age"
 ]
