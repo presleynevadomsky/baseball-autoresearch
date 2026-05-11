@@ -3,10 +3,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 def build_model():
-    """
-    Baseline: linear regression using all physical features.
-    The agent will modify this function each iteration.
-    """
     return Pipeline([
         ("scaler", StandardScaler()),
         ("model", LinearRegression())
