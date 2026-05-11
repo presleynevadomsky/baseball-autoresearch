@@ -8,7 +8,7 @@
 **Train/val:** 2017-2021 seasons (302 matched pairs)
 **Test:** 2022-2023 seasons (131 rows, locked)
 **Baseline:** 4.027314 (all features, linear regression, 2-year avg inputs)
-**Current Best:** 3.946055
+**Current Best:** 3.943865
 
 ---
 
@@ -75,13 +75,16 @@
 | 47 | 2026-05-10 | Ridge alpha=1.0, no age, no burst, 5 features | -burst | 5 features | 3.953726 | -0.074 | ❌ discard | Signal Failure |
 | 48 | 2026-05-10 | RidgeCV auto-tuned alpha (logspace -2 to 2, 100 alphas), no age, 6 features | Ridge α=1.0 → RidgeCV | 6 features | 3.998662 | -0.029 | ❌ discard | Signal Failure |
 | 49 | 2026-05-10 | PowerTransformer(Yeo-Johnson) + Ridge alpha=1.0, no age, 6 features | StandardScaler → PowerTransformer | 6 features | 3.946055 | -0.081 | ✅ keep | — |
+| 50 | 2026-05-10 | PowerTransformer(Yeo-Johnson) + LinearRegression, no age, 6 features | Ridge α=1.0 → OLS | 6 features | 3.943865 | -0.083 | ✅ keep | — |
+| 51 | 2026-05-10 | QuantileTransformer(normal) + LinearRegression, no age, 6 features | PowerTransformer → QuantileTransformer | 6 features | 3.976313 | -0.051 | ❌ discard | Signal Failure |
+| 52 | 2026-05-10 | RobustScaler + LinearRegression, no age, 6 features | PowerTransformer → RobustScaler | 6 features | 3.952057 | -0.075 | ❌ discard | Signal Failure |
 
 ---
 
 ## Error Taxonomy
 
 ### Signal Failure — *Loop ran but no meaningful improvement*
-Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, 34, 37, 38, 42, 43, 44, 45, 46, 47, and 48: model ran correctly but did not beat the current best.
+Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, 34, 37, 38, 42, 43, 44, 45, 46, 47, 48, 51, and 52: model ran correctly but did not beat the current best.
 
 ### Code Instability — *Crashes or broken pipeline*
 No instances.
@@ -103,6 +106,8 @@ No instances.
 - **f_bootup_distance matters with 2-yr avg:** Unlike 1-yr data, removing f_bootup_distance on 2-yr averaged inputs raises RMSE from 3.952 to 3.989 — the absolute bootup feature adds unique signal
 - **Optimal Ridge alpha is ~1.0 for 6 features (2-yr data):** Alpha=1.0 is the sweet spot; going lower (RidgeCV) or higher (2.0) both degrade performance
 - **PowerTransformer beats StandardScaler:** Yeo-Johnson normalization (which handles skewed physical distributions) improves on StandardScaler — RMSE 3.946055 vs 3.951500
+- **OLS beats Ridge with PowerTransformer:** Removing regularization entirely (PowerTransformer + OLS) improves on Ridge α=1.0 — 3.943865 vs 3.946055; PowerTransformer's normalization reduces the need for regularization
+- **QuantileTransformer and RobustScaler don't help:** Both perform worse than PowerTransformer on these 6 physical tracking features (3.976313 and 3.952057 respectively)
 - **Age still hurts on 2-yr avg:** Ridge alpha=1.0 with age = 4.024707, without age = 3.951500 — 2-yr averaging doesn't fix the age noise problem
 - **Non-linear models don't help:** HuberRegressor, along with all tree-based and kernel models tested on 1-yr data, performs worse than regularized linear regression
-- **Best model (2-yr avg):** PowerTransformer + Ridge alpha=1.0, no age, 6 features — RMSE 3.946055 (-0.081 vs 2-yr baseline)
+- **Best model (2-yr avg):** PowerTransformer(Yeo-Johnson) + LinearRegression, no age, 6 features — RMSE 3.943865 (-0.083 vs 2-yr baseline)

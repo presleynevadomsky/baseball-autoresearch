@@ -1,11 +1,11 @@
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PowerTransformer
 
 def build_model():
     return Pipeline([
         ("scaler", PowerTransformer(method="yeo-johnson")),
-        ("model", Ridge(alpha=1.0))
+        ("model", LinearRegression())
     ])
 
 FEATURES = [
