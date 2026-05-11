@@ -32,3 +32,4 @@
 2026-05-10 19:28:25	Ridge alpha=0.01, burst+reaction+routing+sprint only	['rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_routing_distance', 'sprint_speed']	4.601956	0.0
 2026-05-10 19:28:40	LinearRegression, burst+reaction+routing+sprint only	['rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_routing_distance', 'sprint_speed']	4.601943	0.0
 2026-05-10 19:28:59	PolyFeatures(degree=2) + Ridge alpha=1.0, 4 features	['rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_routing_distance', 'sprint_speed']	4.693135	0.0
+2026-05-10 19:59:29	2-year avg baseline: all features linear regression	['rel_league_burst_distance', 'rel_league_reaction_distance', 'rel_league_routing_distance', 'rel_league_bootup_distance', 'f_bootup_distance', 'sprint_speed', 'age']	4.027314	0.0

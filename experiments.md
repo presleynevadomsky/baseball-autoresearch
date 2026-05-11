@@ -4,12 +4,11 @@
 **Author:** Presley Nevadomsky  
 **Research Question:** Can an AI agent discover the best model for predicting an outfielder's OAA next season from their physical tracking data this season?  
 **Target Variable:** next_year_oaa (Outs Above Average in year N+1)  
-**Input Features:** Year N physical tracking stats (burst, reaction, routing, bootup, sprint speed, age)  
-**Validation Metric:** val_rmse (lower is better)  
-**Train/val:** 2016-2022 seasons (430 matched pairs)  
-**Test:** 2023 → 2024 OAA (69 rows, locked)  
-**Baseline:** 4.759972 (all features, linear regression)  
-**Current Best:** 4.601943
+**Input Features:** Average of year N-1 and year N physical tracking stats (burst, reaction, routing, bootup, sprint speed, age)
+**Train/val:** 2017-2021 seasons (302 matched pairs)
+**Test:** 2022-2023 seasons (131 rows, locked)
+**Baseline:** 4.027314 (all features, linear regression, 2-year avg inputs)
+**Current Best:** 4.027314
 
 ---
 
@@ -51,6 +50,17 @@
 | 32 | 2026-05-10 | Ridge alpha=0.01, burst+reaction+routing+sprint only | alpha: 0.1 → 0.01 | 4 features | 4.601956 | -0.158 | ✅ keep | — |
 | 33 | 2026-05-10 | LinearRegression, burst+reaction+routing+sprint only | Ridge → OLS | 4 features | 4.601943 | -0.158 | ✅ keep | — |
 | 34 | 2026-05-10 | PolyFeatures(degree=2) + Ridge alpha=1.0, 4 features | +polynomial interactions | 14 poly features | 4.693135 | -0.067 | ❌ discard | Signal Failure |
+
+---
+
+## ⚠️ Approach Change — Week 5
+
+**Date:** 2026-05-10  
+**Change:** Switched to 2-year averaged physical tracking inputs to reduce noise. Improved baseline from 4.759972 to 4.027314.
+
+---
+
+| 35 | 2026-05-10 | 2-year avg baseline: all features linear regression | 2-year avg inputs | all 7 | 4.027314 | — | baseline | — |
 
 ---
 

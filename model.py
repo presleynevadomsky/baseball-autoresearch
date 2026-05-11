@@ -12,5 +12,8 @@ FEATURES = [
     "rel_league_burst_distance",
     "rel_league_reaction_distance",
     "rel_league_routing_distance",
+    "rel_league_bootup_distance",
+    "f_bootup_distance",
     "sprint_speed",
+    "age"
 ]

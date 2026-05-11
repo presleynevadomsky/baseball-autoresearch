@@ -27,10 +27,11 @@ Specifically, you may change:
 
 ## Dataset
 
-- **Input (X):** Year N physical tracking stats for each outfielder
+- **Input (X):** Average of year N-1 and year N physical tracking stats (2-year average) for each outfielder
 - **Target (y):** Year N+1 OAA for the same outfielder
-- **Train/val:** 2016-2022 seasons (430 matched pairs)
-- **Test:** 2023 seasons → 2024 OAA (69 rows, locked — do not touch)
+- **Train/val:** 2017-2021 seasons (302 matched pairs)
+- **Test:** 2022-2023 seasons → next-year OAA (131 rows, locked — do not touch)
+- **Note:** If a player only appears in year N (not N-1), year N stats are used alone
 
 ## Available Features
 
