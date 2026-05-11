@@ -63,14 +63,9 @@ You can also combine feature engineering with any model using sklearn Pipelines:
 
 ## How to Run an Experiment
 
-Make sure your virtual environment is activated:
+The virtual environment is already activated. Run experiments with:
 ```bash
-source stat390/bin/activate
-```
-
-Then run:
-```bash
-python3 run.py "<short description of what you changed>"
+python3 run.py ""
 ```
 
 ## Current Best
@@ -90,9 +85,18 @@ All results are automatically logged to `results.tsv` with timestamp, descriptio
 
 1. Read results.tsv to find the current best val_rmse
 2. Propose one change to model.py
-3. Activate venv and run: `python3 run.py "<description>"`
+3. Run: `python3 run.py "<description>"`
 4. Compare new val_rmse to current best
 5. Keep or revert
 6. Repeat for at least 20 iterations
 7. After all iterations run: `python3 prepare.py` to generate performance.png
 8. After each experiment, append a new row to `experiments.md` with: experiment number, description of what changed, val_rmse, keep or discard decision, and error type (Signal Failure, Code Instability, Agent Misbehavior, or Evaluation Leakage)
+
+## Research Strategy
+
+Do NOT pre-plan all experiments at once. After each experiment:
+- Read the result
+- Decide the NEXT experiment based on what you just learned
+- If a change improved RMSE, explore that direction further
+- If a change didn't help, try something different
+- Be adaptive — let each result guide the next hypothesis

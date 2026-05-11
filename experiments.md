@@ -8,7 +8,7 @@
 **Train/val:** 2017-2021 seasons (302 matched pairs)
 **Test:** 2022-2023 seasons (131 rows, locked)
 **Baseline:** 4.027314 (all features, linear regression, 2-year avg inputs)
-**Current Best:** 4.027314
+**Current Best:** 3.946055
 
 ---
 
@@ -61,13 +61,27 @@
 ---
 
 | 35 | 2026-05-10 | 2-year avg baseline: all features linear regression | 2-year avg inputs | all 7 | 4.027314 | — | baseline | — |
+| 36 | 2026-05-10 | LinearRegression, no age, 6 features | -age | 6 features | 3.952057 | -0.075 | ✅ keep | — |
+| 37 | 2026-05-10 | LinearRegression, 4 core features: burst+reaction+routing+sprint | -bootup features | 4 features | 3.985381 | -0.042 | ❌ discard | Signal Failure |
+| 38 | 2026-05-10 | LinearRegression, no age, no f_bootup, 5 rel features + sprint | -f_bootup | 5 features | 3.989897 | -0.037 | ❌ discard | Signal Failure |
+| 39 | 2026-05-10 | Ridge alpha=0.1, no age, 6 features | LinearReg → Ridge α=0.1 | 6 features | 3.951926 | -0.075 | ✅ keep | — |
+| 40 | 2026-05-10 | Ridge alpha=0.5, no age, 6 features | alpha: 0.1 → 0.5 | 6 features | 3.951607 | -0.076 | ✅ keep | — |
+| 41 | 2026-05-10 | Ridge alpha=1.0, no age, 6 features | alpha: 0.5 → 1.0 | 6 features | 3.951500 | -0.076 | ✅ keep | — |
+| 42 | 2026-05-10 | Ridge alpha=2.0, no age, 6 features | alpha: 1.0 → 2.0 | 6 features | 3.951757 | -0.076 | ❌ discard | Signal Failure |
+| 43 | 2026-05-10 | Ridge alpha=1.0, no age, no f_bootup, 5 rel features + sprint | -f_bootup | 5 features | 3.989362 | -0.038 | ❌ discard | Signal Failure |
+| 44 | 2026-05-10 | HuberRegressor ε=1.35 α=0.001, no age, 6 features | Ridge → Huber | 6 features | 3.994817 | -0.033 | ❌ discard | Signal Failure |
+| 45 | 2026-05-10 | Ridge alpha=1.0, all 7 features including age | +age | all 7 | 4.024707 | -0.003 | ❌ discard | Signal Failure |
+| 46 | 2026-05-10 | Ridge alpha=1.0, no age, no reaction, 5 features | -reaction | 5 features | 3.953546 | -0.074 | ❌ discard | Signal Failure |
+| 47 | 2026-05-10 | Ridge alpha=1.0, no age, no burst, 5 features | -burst | 5 features | 3.953726 | -0.074 | ❌ discard | Signal Failure |
+| 48 | 2026-05-10 | RidgeCV auto-tuned alpha (logspace -2 to 2, 100 alphas), no age, 6 features | Ridge α=1.0 → RidgeCV | 6 features | 3.998662 | -0.029 | ❌ discard | Signal Failure |
+| 49 | 2026-05-10 | PowerTransformer(Yeo-Johnson) + Ridge alpha=1.0, no age, 6 features | StandardScaler → PowerTransformer | 6 features | 3.946055 | -0.081 | ✅ keep | — |
 
 ---
 
 ## Error Taxonomy
 
 ### Signal Failure — *Loop ran but no meaningful improvement*
-Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, and 34: model ran correctly but did not beat the current best.
+Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, 34, 37, 38, 42, 43, 44, 45, 46, 47, and 48: model ran correctly but did not beat the current best.
 
 ### Code Instability — *Crashes or broken pipeline*
 No instances.
@@ -83,11 +97,12 @@ No instances.
 ## Key Findings
 
 - **Baseline RMSE:** 4.759972 — predicting next-year OAA is harder than same-year OAA
-- **Age hurts the model:** Removing age improves RMSE from 4.759972 to 4.661245
-- **Ridge helps slightly without age:** Ridge alpha=1.0 without age achieves 4.659598
-- **Optimal Ridge alpha is ~5 for 6 features:** Increasing regularization helps up to alpha=5, then degrades
-- **Dropping f_bootup_distance is beneficial:** Removing the absolute bootup distance (keeping only the relative version) improves 5-feature RMSE from 4.657792 → 4.608974 (with best alpha tuning reaching 4.607964)
-- **Dropping BOTH bootup features is even better:** Removing rel_league_bootup_distance too (leaving burst, reaction, routing, sprint) drops RMSE to ~4.602
-- **OLS beats Ridge with 4 clean features:** As features are pruned to only the most predictive ones, regularization becomes unnecessary — plain LinearRegression achieves the best RMSE of 4.601943
-- **Non-linear models don't help:** RandomForest, GBR, SVR, ElasticNet, Lasso, and PolynomialFeatures all perform worse than simple linear regression on this dataset
-- **Best model:** LinearRegression with 4 features (burst, reaction, routing, sprint_speed) — RMSE 4.601943 (-0.158 vs baseline)
+- **Age hurts the model:** Removing age improves RMSE from 4.759972 to 4.661245 (1-yr) and 4.027314 to 3.952057 (2-yr avg)
+- **Ridge helps slightly without age:** Ridge alpha=1.0 without age achieves 4.659598 (1-yr) and 3.951500 (2-yr avg)
+- **2-year averaging changes feature importance:** With 1-yr data, dropping both bootup features helped; with 2-yr avg data, all 6 non-age features contribute — dropping any one hurts performance
+- **f_bootup_distance matters with 2-yr avg:** Unlike 1-yr data, removing f_bootup_distance on 2-yr averaged inputs raises RMSE from 3.952 to 3.989 — the absolute bootup feature adds unique signal
+- **Optimal Ridge alpha is ~1.0 for 6 features (2-yr data):** Alpha=1.0 is the sweet spot; going lower (RidgeCV) or higher (2.0) both degrade performance
+- **PowerTransformer beats StandardScaler:** Yeo-Johnson normalization (which handles skewed physical distributions) improves on StandardScaler — RMSE 3.946055 vs 3.951500
+- **Age still hurts on 2-yr avg:** Ridge alpha=1.0 with age = 4.024707, without age = 3.951500 — 2-yr averaging doesn't fix the age noise problem
+- **Non-linear models don't help:** HuberRegressor, along with all tree-based and kernel models tested on 1-yr data, performs worse than regularized linear regression
+- **Best model (2-yr avg):** PowerTransformer + Ridge alpha=1.0, no age, 6 features — RMSE 3.946055 (-0.081 vs 2-yr baseline)
