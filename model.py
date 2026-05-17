@@ -1,11 +1,12 @@
-from sklearn.linear_model import LinearRegression
+from xgboost import XGBRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PowerTransformer
 
 def build_model():
     return Pipeline([
-        ("scaler", PowerTransformer(method="yeo-johnson")),
-        ("model", LinearRegression())
+        ("scaler", PowerTransformer()),
+        ("model", XGBRegressor(n_estimators=500, max_depth=1, learning_rate=0.05,
+                               reg_lambda=50, reg_alpha=1.0, random_state=42, verbosity=0))
     ])
 
 FEATURES = [

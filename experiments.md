@@ -8,7 +8,7 @@
 **Train/val:** 2017-2021 seasons (302 matched pairs)
 **Test:** 2022-2023 seasons (131 rows, locked)
 **Baseline:** 4.027314 (all features, linear regression, 2-year avg inputs)
-**Current Best:** 3.943865
+**Current Best:** 3.908619
 
 ---
 
@@ -78,13 +78,34 @@
 | 50 | 2026-05-10 | PowerTransformer(Yeo-Johnson) + LinearRegression, no age, 6 features | Ridge α=1.0 → OLS | 6 features | 3.943865 | -0.083 | ✅ keep | — |
 | 51 | 2026-05-10 | QuantileTransformer(normal) + LinearRegression, no age, 6 features | PowerTransformer → QuantileTransformer | 6 features | 3.976313 | -0.051 | ❌ discard | Signal Failure |
 | 52 | 2026-05-10 | RobustScaler + LinearRegression, no age, 6 features | PowerTransformer → RobustScaler | 6 features | 3.952057 | -0.075 | ❌ discard | Signal Failure |
+| 53 | 2026-05-17 | XGBoost n=100 depth=3 lr=0.1 PowerTransformer no age | OLS → XGBoost depth=3 | 6 features | 4.036305 | +0.009 | ❌ discard | Signal Failure |
+| 54 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=5 PowerTransformer no age | depth=3 → depth=1 stumps, lambda=5 | 6 features | 3.929331 | -0.098 | ✅ keep | — |
+| 55 | 2026-05-17 | XGBoost depth=1 n=1000 lr=0.02 lambda=5 PowerTransformer no age | n=500 → n=1000, lr=0.05 → 0.02 | 6 features | 3.931917 | -0.095 | ❌ discard | Signal Failure |
+| 56 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=10 PowerTransformer no age | lambda=5 → 10 | 6 features | 3.927346 | -0.100 | ✅ keep | — |
+| 57 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=20 PowerTransformer no age | lambda=10 → 20 | 6 features | 3.918694 | -0.109 | ✅ keep | — |
+| 58 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 PowerTransformer no age | lambda=20 → 50 | 6 features | 3.911379 | -0.116 | ✅ keep | — |
+| 59 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=100 PowerTransformer no age | lambda=50 → 100 | 6 features | 3.931181 | -0.096 | ❌ discard | Signal Failure |
+| 60 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1.0 PowerTransformer no age | +reg_alpha=1.0 | 6 features | 3.908619 | -0.119 | ✅ keep | — |
+| 61 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=5.0 PowerTransformer no age | alpha=1.0 → 5.0 | 6 features | 3.921280 | -0.106 | ❌ discard | Signal Failure |
+| 62 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1.0 min_child_weight=5 | +min_child_weight=5 | 6 features | 3.908619 | -0.119 | ❌ discard | Signal Failure |
+| 63 | 2026-05-17 | XGBoost depth=1 n=800 lr=0.03 lambda=50 alpha=1.0 PowerTransformer no age | n=500 → 800, lr=0.05 → 0.03 | 6 features | 3.918283 | -0.109 | ❌ discard | Signal Failure |
+| 64 | 2026-05-17 | XGBoost no scaler depth=1 n=500 lr=0.05 lambda=50 alpha=1.0 no age | removed PowerTransformer | 6 features | 3.908619 | -0.119 | ❌ discard | Signal Failure |
+| 65 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1 subsample=0.8 colsample=0.8 | +subsample +colsample_bytree | 6 features | 3.913961 | -0.113 | ❌ discard | Signal Failure |
+| 66 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1 gamma=0.5 PowerTransformer | +gamma=0.5 | 6 features | 3.908619 | -0.119 | ❌ discard | Signal Failure |
+| 67 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1 PowerTransformer with age | +age | 7 features | 3.987816 | -0.040 | ❌ discard | Signal Failure |
+| 68 | 2026-05-17 | HistGradientBoosting max_iter=500 depth=1 lr=0.05 l2=50 no age | XGBoost → HistGBM | 6 features | 3.913448 | -0.114 | ❌ discard | Signal Failure |
+| 69 | 2026-05-17 | PowerTransformer + PolyFeatures(degree=2) + Ridge alpha=10, 6 features no age | +polynomial interactions | 21 poly | 3.992703 | -0.035 | ❌ discard | Signal Failure |
+| 70 | 2026-05-17 | PowerTransformer + PolyFeatures(degree=2) + Ridge alpha=100, 6 features no age | alpha=10 → 100 | 21 poly | 4.046314 | +0.019 | ❌ discard | Signal Failure |
+| 71 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1 PowerTransformer 4 core features | -bootup features | 4 features | 4.098170 | +0.071 | ❌ discard | Signal Failure |
+| 72 | 2026-05-17 | XGBoost depth=1 n=500 lr=0.05 lambda=50 alpha=1 huber objective PowerTransformer | objective=pseudohuber | 6 features | 4.166946 | +0.140 | ❌ discard | Signal Failure |
+| 73 | 2026-05-17 | XGBoost depth=2 n=500 lr=0.05 lambda=200 alpha=5 PowerTransformer no age | depth=1→2, extreme reg | 6 features | 3.972294 | -0.055 | ❌ discard | Signal Failure |
 
 ---
 
 ## Error Taxonomy
 
 ### Signal Failure — *Loop ran but no meaningful improvement*
-Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, 34, 37, 38, 42, 43, 44, 45, 46, 47, 48, 51, and 52: model ran correctly but did not beat the current best.
+Experiments 2, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 25, 26, 28, 34, 37, 38, 42, 43, 44, 45, 46, 47, 48, 51, 52, 53, 55, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, and 73: model ran correctly but did not beat the current best.
 
 ### Code Instability — *Crashes or broken pipeline*
 No instances.
@@ -110,4 +131,15 @@ No instances.
 - **QuantileTransformer and RobustScaler don't help:** Both perform worse than PowerTransformer on these 6 physical tracking features (3.976313 and 3.952057 respectively)
 - **Age still hurts on 2-yr avg:** Ridge alpha=1.0 with age = 4.024707, without age = 3.951500 — 2-yr averaging doesn't fix the age noise problem
 - **Non-linear models don't help:** HuberRegressor, along with all tree-based and kernel models tested on 1-yr data, performs worse than regularized linear regression
-- **Best model (2-yr avg):** PowerTransformer(Yeo-Johnson) + LinearRegression, no age, 6 features — RMSE 3.943865 (-0.083 vs 2-yr baseline)
+- **XGBoost requires depth=1 stumps + heavy regularization to compete:** Deeper XGBoost (depth=3) loses badly (4.036). Only depth=1 stumps with lambda≥5 beat the linear model; optimal is lambda=50, reg_alpha=1.0 (L1+L2 combo)
+- **XGBoost reg_lambda sweet spot is ~50:** RMSE improves monotonically from lambda=5 (3.929) to lambda=50 (3.911) but degrades at lambda=100 (3.931) — over-regularization collapses the model
+- **Adding L1 (reg_alpha=1.0) on top of lambda=50 gives a small further gain:** 3.911 → 3.909; higher alpha=5.0 hurts
+- **XGBoost is truly scale-invariant:** Removing PowerTransformer from XGBoost gives identical RMSE (3.908619) — tree splits don't care about monotonic feature transforms
+- **Stochasticity hurts with 6 features:** subsample=0.8 + colsample_bytree=0.8 degrades performance (3.914) — too few features per tree with colsample applied
+- **Gamma and min_child_weight are redundant with high lambda:** gamma=0.5 and min_child_weight=5 tie but don't improve — lambda=50 already prevents weak splits
+- **Age hurts XGBoost too:** Adding age → 3.988 (vs 3.909 without) — confirms age adds noise regardless of model type
+- **Polynomial features don't help on 2-yr data:** PolyFeatures(degree=2) + Ridge alpha∈[10,100] both fail — smoothed 2-yr features have no useful nonlinear interactions
+- **Both bootup features are necessary:** Dropping to 4 core features → 4.098 (worst in this batch) — f_bootup and rel_league_bootup each contribute unique signal
+- **Huber objective is wrong loss for RMSE:** Optimizing pseudo-Huber → 4.167 (worst overall in session) — RMSE metric rewards squared-error optimization
+- **depth=2 with extreme regularization doesn't help:** lambda=200, alpha=5, depth=2 → 3.972 — feature interactions provide no lift over additive stumps
+- **Best model (2-yr avg):** XGBoost depth=1, n=500, lr=0.05, lambda=50, alpha=1.0 + PowerTransformer, no age, 6 features — RMSE 3.908619 (-0.119 vs 2-yr baseline). Model appears converged.
