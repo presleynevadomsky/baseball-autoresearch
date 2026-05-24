@@ -59,7 +59,8 @@
 **Change:** Switched to 2-year averaged physical tracking inputs to reduce noise. Improved baseline from 4.759972 to 4.027314.
 
 ---
-
+| # | Date | Description | What Changed | Features | Val RMSE | vs Baseline | Result | Error Type |
+|---|------|-------------|--------------|----------|----------|-------------|--------|------------|
 | 35 | 2026-05-10 | 2-year avg baseline: all features linear regression | 2-year avg inputs | all 7 | 4.027314 | — | baseline | — |
 | 36 | 2026-05-10 | LinearRegression, no age, 6 features | -age | 6 features | 3.952057 | -0.075 | ✅ keep | — |
 | 37 | 2026-05-10 | LinearRegression, 4 core features: burst+reaction+routing+sprint | -bootup features | 4 features | 3.985381 | -0.042 | ❌ discard | Signal Failure |
