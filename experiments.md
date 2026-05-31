@@ -144,3 +144,5 @@ No instances.
 - **Huber objective is wrong loss for RMSE:** Optimizing pseudo-Huber → 4.167 (worst overall in session) — RMSE metric rewards squared-error optimization
 - **depth=2 with extreme regularization doesn't help:** lambda=200, alpha=5, depth=2 → 3.972 — feature interactions provide no lift over additive stumps
 - **Best model (2-yr avg):** XGBoost depth=1, n=500, lr=0.05, lambda=50, alpha=1.0 + PowerTransformer, no age, 6 features — RMSE 3.908619 (-0.119 vs 2-yr baseline). Model appears converged.
+- **Test RMSE: 4.160506** — model generalizes to unseen data, 12.6% improvement over original baseline of 4.759972
+- **Test R²: 0.3444** — model explains 34% of next-year OAA variance on completely unseen data

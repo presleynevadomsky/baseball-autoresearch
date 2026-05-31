@@ -43,7 +43,7 @@ You may use any combination of these variables in FEATURES:
 - `rel_league_bootup_distance` — first step relative to league average
 - `f_bootup_distance` — absolute first step distance
 - `sprint_speed` — player sprint speed in ft/sec
-- `age` — player age (important for predicting year-over-year change)
+- `age` — player age (note: found to consistently hurt performance — not recommended)
 
 ## Available Models
 
