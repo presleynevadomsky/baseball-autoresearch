@@ -33,18 +33,19 @@ test_data.py    — pulls and builds year-matched dataset from Statcast
 
 ## Dataset
 
-- **Input (X):** Year N physical tracking stats per outfielder (burst distance, reaction time, route efficiency, first step, sprint speed, age)
+- **Input (X):** Average of year N-1 and year N physical tracking stats (burst distance, reaction time, route efficiency, first step, sprint speed) — no age
 - **Target (y):** Year N+1 OAA for the same outfielder
-- **Train/val:** 2016–2022 seasons (430 matched pairs)
-- **Test:** 2023 → 2024 OAA (69 rows, locked — not touched until final evaluation)
+- **Train/val:** 2017-2021 seasons (302 matched pairs)
+- **Test:** 2022-2023 seasons → next-year OAA (131 rows, locked)
 
 ## Baseline Results
 
-| Description | Features | Val RMSE | Runtime |
-|-------------|----------|----------|---------|
-| All features, linear regression | all 7 physical traits | 4.759972 | 0.01s |
+| Description | Features | Val RMSE |
+|-------------|----------|----------|
+| All features, linear regression | all 7 physical traits | 4.759972 |
+| **Final best (XGBoost depth=1)** | **6 features, no age** | **3.908619** |
 
-Validation split: 80/20, random_state=42
+Test RMSE: 4.160506
 
 ## Setup
 
